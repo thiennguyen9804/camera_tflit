@@ -1,6 +1,6 @@
 package com.example.camera_tflit
 
-data class Yuv420888Image(
+open data class Yuv420888Image(
     val width: Int,
     val height: Int,
     val y: ByteArray,
@@ -10,7 +10,6 @@ data class Yuv420888Image(
     val uvRowStride: Int,
     val yPixelStride: Int,
     val uvPixelStride: Int,
-
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,6 +29,8 @@ data class Yuv420888Image(
 
         return true
     }
+
+
 
     override fun hashCode(): Int {
         var result = width
