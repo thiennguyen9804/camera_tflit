@@ -25,3 +25,4 @@ plugins {
 include(":app")
 //project(":render-toolkit").projectDir = File(rootProject.projectDir, "render-toolkit")
 include(":render-toolkit")
+include(":renderscript-toolkit")

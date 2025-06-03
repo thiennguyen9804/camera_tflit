@@ -2,15 +2,20 @@ package com.example.camera_tflit
 
 import android.graphics.Bitmap
 import android.util.Log
+import com.google.android.renderscript.Toolkit
+import com.google.android.renderscript.YuvFormat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodChannel
-import com.example.
-import com.google.android.renderscript.Toolkit
+import io.flutter.plugin.common.StandardMethodCodec
 
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterActivity(), FlutterPlugin {
     private val CHANNEL = "com.example.camera_tflit/classify"
+
+
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
@@ -22,7 +27,7 @@ class MainActivity : FlutterActivity() {
                     val arguments = call.arguments as? Map<*, *>
 
                     if (arguments != null) {
-                        val image = Yuv420888Image.fromMap(arguments)
+                        val image = Yuv420888ImageAdapter(arguments)
                         detectLandmark(image)
                     } else {
                         result.error("INVALID_ARGS", "Invalid arguments received", null)
@@ -38,9 +43,25 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun detectLandmark(image: Yuv420888Image): String {
-        Toolkit.yuvToRgbBitmap()
+        val nv21 = (image as Yuv420888ImageAdapter).toNv21()
+        Toolkit.yuvToRgbBitmap(nv21!!, image.width, image.height, YuvFormat.NV21)
         return "Hello"
 
+    }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        val taskQueue = binding.binaryMessenger.makeBackgroundTaskQueue()
+        val channel = MethodChannel(
+            binding.binaryMessenger,
+            CHANNEL,
+            StandardMethodCodec.INSTANCE,
+            taskQueue
+        )
+        channel.setMethodCallHandler {  }
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        TODO("Not yet implemented")
     }
 
 }

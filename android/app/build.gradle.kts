@@ -19,6 +19,7 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.camera_tflit"
@@ -35,6 +36,8 @@ android {
             }
         }
     }
+
+    ndkVersion = "27.0.12077973"
 
     externalNativeBuild {
         cmake {
@@ -59,6 +62,6 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
     implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
     implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
-    implementation(project(":render-toolkit"))
+    implementation(project(":renderscript-toolkit"))
 }
 
