@@ -1,0 +1,35 @@
+package com.example.camera_tflit
+
+object ShaderCode {
+    val vertexShaderCode = StringBuilder()
+        .append("#version 300 es")
+        .append("precision mediump float;")
+        .append("in vec4 a_position;")
+        .append("in vec2 a_texCoord")
+        .append("out vec2 v_texCoord")
+        .append("void main() {")
+        .append("gl_Position = a_position;")
+        .append("v_texCoord = a_texCoord;")
+        .append("}")
+        .toString()
+
+
+    val fragmentShaderCode = StringBuilder()
+        .append("#version 300 es")
+        .append("precision mediump float;")
+        .append("in vec2 v_texCoord;")
+        .append("out vec4 outColor;")
+        .append("uniform sampler2D yTexture;")
+        .append("uniform sampler2D uTexture;")
+        .append("uniform sampler2D vTexture;")
+        .append("void main() {")
+        .append("float y = texture(yTexture, v_texCoord).r;")
+        .append("float u = texture(uTexture, u_texCoord).r;")
+        .append("float v = texture(vTexture, v_texCoord),r;")
+        .append("float r = y + 1.14 * v;")
+        .append("float g = y - 0.395 * u - 0.581 * v;")
+        .append("float b = y + 2.033 * u;")
+        .append("outColor = vec4(r, g, b, 1.0)")
+        .append("}")
+        .toString()
+}

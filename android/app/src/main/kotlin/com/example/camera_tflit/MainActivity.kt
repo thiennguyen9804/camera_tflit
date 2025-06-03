@@ -11,10 +11,9 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMethodCodec
 
 
-class MainActivity : FlutterActivity(), FlutterPlugin {
+
+class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.camera_tflit/classify"
-
-
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -25,7 +24,6 @@ class MainActivity : FlutterActivity(), FlutterPlugin {
             when (call.method) {
                 "getLandmark" -> {
                     val arguments = call.arguments as? Map<*, *>
-
                     if (arguments != null) {
                         val image = Yuv420888ImageAdapter(arguments)
                         detectLandmark(image)
@@ -46,22 +44,6 @@ class MainActivity : FlutterActivity(), FlutterPlugin {
         val nv21 = (image as Yuv420888ImageAdapter).toNv21()
         Toolkit.yuvToRgbBitmap(nv21!!, image.width, image.height, YuvFormat.NV21)
         return "Hello"
-
-    }
-
-    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        val taskQueue = binding.binaryMessenger.makeBackgroundTaskQueue()
-        val channel = MethodChannel(
-            binding.binaryMessenger,
-            CHANNEL,
-            StandardMethodCodec.INSTANCE,
-            taskQueue
-        )
-        channel.setMethodCallHandler {  }
-    }
-
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        TODO("Not yet implemented")
     }
 
 }

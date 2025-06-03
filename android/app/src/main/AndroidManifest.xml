@@ -2,6 +2,8 @@
     <!-- <meta-data
         android:name="io.flutter.embedding.android.EnableImpeller"
         android:value="false" /> -->
+    <uses-feature android:glEsVersion="0x00030000" android:required="true" />
+
     <application
         android:label="camera_tflit"
         android:name="${applicationName}"
