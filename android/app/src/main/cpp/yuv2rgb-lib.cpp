@@ -19,11 +19,20 @@ namespace {
             memcpy(nv21 + destOffset, y_buffer + yOffset, width);
         }
 
-        if(v_buffer - u_buffer == sizeof(uint8_t) || u_buffer - v_buffer == sizeof(uint8_t)) {
 
+
+        int idUV = width * height;
+        int uv_width = width / 2;
+        int uv_height = height / 2;
+
+        for(int y = 0; y < uv_height; y++) {
+            int uv_offset = (y * uv_row_stride);
+            for(int x = 0; x < uv_width; x++) {
+                int buffer_index = uv_offset + (x * uv_pixel_stride);
+                nv21[idUV++] = v_buffer[buffer_index];
+                nv21[idUV++] = u_buffer[buffer_index];
+            }
         }
-
-
     }
 }
 
@@ -38,5 +47,5 @@ Java_com_example_camera_1tflit_Yuv420888ImageAdapter_yuv2Nv21(JNIEnv *env, jobje
                                                               jint y_pixel_stride,
                                                               jint uv_pixel_stride,
                                                               jbyteArray nv21_output) {
-
+    auto y_buffer = static_cast<uint8_t*>
 }
