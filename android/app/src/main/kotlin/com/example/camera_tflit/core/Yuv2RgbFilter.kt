@@ -38,5 +38,20 @@ object Yuv2RgbFilter {
         ShaderManager.checkGlError("glGetUniformLocation");
     }
 
+    fun generateTexture() {
+        GLES20.glPixelStorei(GLES20.GL_UNPACK_ALIGNMENT, 1)
+        GLES20.glUseProgram(mProgram!!)
+        GLES20.glGenTextures(3, mTextureHandle, 0)
+        for (i in 0..2) {
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureHandle[i])
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        }
+    }
+
+
 
 }
