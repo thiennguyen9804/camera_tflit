@@ -13,8 +13,8 @@ object ShaderCode {
         .append("}")
         .toString()
 
-
     val fragmentShaderCode = StringBuilder()
+
         .append("#version 300 es")
         .append("precision mediump float;")
         .append("in vec2 v_texCoord;")

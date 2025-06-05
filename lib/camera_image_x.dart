@@ -16,7 +16,8 @@ extension CameraImageX on CameraImage {
       'yRowStride': planes[0].bytesPerRow,
       'uvRowStride': planes[1].bytesPerRow,
       'yPixelStride': planes[0].bytesPerPixel,
-      'uvPixelStride': planes[1].bytesPerPixel
+      'uvPixelStride': planes[1].bytesPerPixel,
+      // 'rotation': this.
     };
 
     return map;

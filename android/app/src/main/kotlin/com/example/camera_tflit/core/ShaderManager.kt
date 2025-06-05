@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLES20
 import android.util.Log
 
-object ShaderManger {
+object ShaderManager {
     var mVertexShader: String? = null
     var mFragShader: String? = null
     var mProgram: Int? = null

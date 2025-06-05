@@ -1,4 +1,5 @@
 import 'package:camera_tflit/camera_image_x.dart';
+import 'package:camera_tflit/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +9,6 @@ late List<CameraDescription> _cameras;
 const platform = MethodChannel('com.example.camera_tflit/classify');
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   _cameras = await availableCameras();
   runApp(const MyApp());
 }
@@ -41,19 +41,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var skipFrameCounter = 0;
 
-  void processImage(CameraImage image) async {
+  Future<String> _processImageNative(CameraImage image) async {
+    String landmark = '';
+
+    try {
+      final customImage = CustomImage(
+        image,
+        controller.description.sensorOrientation,
+      );
+      landmark =
+          await platform.invokeMethod<String>(
+            'getLandmark',
+            customImage.toMap(),
+          ) ??
+          'Unknown landmark';
+    } on PlatformException catch (e) {
+      debugPrint("PlatformException + ${e.message}");
+      landmark = "Failed to get landmark";
+    }
+
+    return landmark;
+  }
+
+  void _processImage(CameraImage image) async {
     // image format: yuv 420 888
     if (skipFrameCounter % 60 == 0) {
-      String landmark = '';
-      try {
-        landmark =
-            await platform.invokeMethod<String>('getLandmark', image.toMap()) ??
-            'Unknown landmark';
-      } on PlatformException catch (e) {
-        debugPrint("PlatformException + ${e.message}");
-        landmark = "Failed to get landmark";
-      }
-
+      final landmark = await _processImageNative(image);
       if (_landmark != landmark) {
         setState(() {
           _landmark = landmark;
@@ -75,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return;
           }
           setState(() {});
-          controller.startImageStream(processImage);
+          // controller.startImageStream(_processImage);
         })
         .catchError((Object e) {
           if (e is CameraException) {
@@ -107,10 +120,16 @@ class _MyHomePageState extends State<MyHomePage> {
           !controller.value.isInitialized
               ? Container()
               : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CameraPreview(controller),
                   SizedBox(height: 10),
                   Text(_landmark),
+                  SizedBox(height: 20),
+                  // ElevatedButton(onPressed: () async {
+                  //   final ximage = await controller.takePicture();
+                    
+                  // }, child: Text('Capture')),
                 ],
               ),
     );

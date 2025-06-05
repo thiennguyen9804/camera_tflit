@@ -1,6 +1,6 @@
 package com.example.camera_tflit.presentation
 
-class Yuv420888ImageAdapter : Yuv420888Image {
+class YuvNv21Adapter : Yuv420888Image {
     constructor(
         width: Int,
         height: Int,
@@ -11,7 +11,11 @@ class Yuv420888ImageAdapter : Yuv420888Image {
         uvRowStride: Int,
         yPixelStride: Int,
         uvPixelStride: Int,
-    ) : super(width,height, y, u, v, yRowStride, uvRowStride, yPixelStride, uvPixelStride)
+        rotation: Int,
+    ) : super(width,height, y, u, v,
+        yRowStride, uvRowStride,
+        yPixelStride, uvPixelStride, rotation
+    )
     constructor(map: Map<*, *>): super(map)
 
     companion object {

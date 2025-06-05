@@ -14,9 +14,12 @@ namespace {
             int y_pixel_stride, int uv_pixel_stride,
             int8_t* nv21
     ) {
-            for(int y = 0; y < height; y++) {
+        for(int y = 0; y < height; y++) {
             int destOffset = y * width;
             int yOffset = y * y_row_stride;
+//            for (int x = 0; x < width; x++) {
+//                nv21[destOffset + x] = y_buffer[yOffset + x * y_pixel_stride];
+//            }
             memcpy(nv21 + destOffset, y_buffer + yOffset, width);
         }
 
@@ -40,14 +43,14 @@ namespace {
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_example_camera_1tflit_Yuv420888ImageAdapter_yuv2Nv21(JNIEnv *env,
-      jobject thiz, jint width,
-      jint height, jbyteArray y,
-      jbyteArray u, jbyteArray v,
-      jint y_row_stride, jint uv_row_stride,
-      jint y_pixel_stride,
-      jint uv_pixel_stride,
-      jbyteArray nv21_output) {
+Java_com_example_camera_1tflit_presentation_YuvNv21Adapter_yuv2Nv21(JNIEnv *env,
+                                                                    jobject thiz, jint width,
+                                                                    jint height, jbyteArray y,
+                                                                    jbyteArray u, jbyteArray v,
+                                                                    jint y_row_stride, jint uv_row_stride,
+                                                                    jint y_pixel_stride,
+                                                                    jint uv_pixel_stride,
+                                                                    jbyteArray nv21_output) {
     auto y_buffer = env->GetByteArrayElements(y, nullptr);
     auto u_buffer = env->GetByteArrayElements(u, nullptr);
     auto v_buffer = env->GetByteArrayElements(v, nullptr);

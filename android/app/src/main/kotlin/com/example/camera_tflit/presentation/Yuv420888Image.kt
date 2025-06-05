@@ -12,6 +12,7 @@ open class Yuv420888Image(
     val uvRowStride: Int,
     val yPixelStride: Int,
     val uvPixelStride: Int,
+    val rotation: Int,
 ) {
     constructor(map: Map<*, *>) : this(
         width = map["width"] as Int,
@@ -22,7 +23,8 @@ open class Yuv420888Image(
         yRowStride = map["yRowStride"] as Int,
         uvRowStride = map["uvRowStride"] as Int,
         yPixelStride = map["yPixelStride"] as Int,
-        uvPixelStride = map["uvPixelStride"] as Int
+        uvPixelStride = map["uvPixelStride"] as Int,
+        rotation = map["rotation"] as Int
     )
 
 }
