@@ -38,6 +38,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late CameraController controller;
   String _landmark = '';
+  double _maxZoom = 1.0;
+  double _minZoom = 1.0;
 
   var skipFrameCounter = 0;
 
@@ -57,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'Unknown landmark';
     } on PlatformException catch (e) {
       debugPrint("PlatformException + ${e.message}");
+      debugPrint(e.stacktrace);
       landmark = "Failed to get landmark";
     }
 
@@ -83,10 +86,12 @@ class _MyHomePageState extends State<MyHomePage> {
     controller = CameraController(_cameras[0], ResolutionPreset.max);
     controller
         .initialize()
-        .then((_) {
+        .then((_) async {
           if (!mounted) {
             return;
           }
+          _maxZoom = await controller.getMaxZoomLevel(); 
+          _minZoom = await controller.getMinZoomLevel();
           setState(() {});
           // controller.startImageStream(_processImage);
         })
@@ -110,6 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  void _cameraScaleHandler(ScaleUpdateDetails details) async {
+    final zoom = (details.scale).clamp(_minZoom, _maxZoom);
+    await controller.setZoomLevel(zoom);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,16 +133,33 @@ class _MyHomePageState extends State<MyHomePage> {
               : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CameraPreview(controller),
+                  GestureDetector(
+                    onScaleUpdate: _cameraScaleHandler,
+                    child: CameraPreview(controller),
+                  ),
                   SizedBox(height: 10),
                   Text(_landmark),
                   SizedBox(height: 20),
                   // ElevatedButton(onPressed: () async {
                   //   final ximage = await controller.takePicture();
-                    
+
                   // }, child: Text('Capture')),
                 ],
               ),
     );
+  }
+}
+
+class _MediaSizeClipper extends CustomClipper<Rect> {
+  final Size mediaSize;
+  const _MediaSizeClipper(this.mediaSize);
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(0, 0, mediaSize.width, mediaSize.height);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
   }
 }

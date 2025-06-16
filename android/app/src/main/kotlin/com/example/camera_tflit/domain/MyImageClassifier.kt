@@ -2,6 +2,6 @@ package com.example.camera_tflit.domain
 
 import android.graphics.Bitmap
 
-interface LandmarkClassifier {
+interface MyImageClassifier {
     fun classify(bitmap: Bitmap, rotation: Int): List<Classification>
 }

@@ -52,6 +52,9 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+    buildFeatures {
+//        mlModelBinding = true
+    }
 }
 
 flutter {

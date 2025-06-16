@@ -3,13 +3,11 @@ package com.example.camera_tflit.data
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import android.view.Surface
-import androidx.annotation.UiContext
 import com.example.camera_tflit.domain.Classification
-import com.example.camera_tflit.domain.LandmarkClassifier
+import com.example.camera_tflit.domain.MyImageClassifier
+import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
@@ -22,11 +20,11 @@ private val mockClassification = listOf<Classification>(
     )
 )
 
-class TFLiteLandmarkClassifier(
+class TFLiteMyImageClassifier(
     private val context: Context,
     private val threshold: Float = 0.5f,
     private val maxResult: Int = 1,
-) : LandmarkClassifier {
+) : MyImageClassifier {
     lateinit var classifier: ImageClassifier
     private fun setUpClassifier() {
         val baseOptions = BaseOptions.builder()
@@ -44,6 +42,7 @@ class TFLiteLandmarkClassifier(
                 options
             )
         } catch (e: Exception) {
+            Log.e("Model Error", "Cannot load model file")
             e.printStackTrace()
         }
     }
@@ -57,7 +56,6 @@ class TFLiteLandmarkClassifier(
         }
 
         val imageProcessor = ImageProcessor.Builder()
-            .add(ResizeWithCropOrPadOp(321, 321))
             .build()
         val imageProcessingOptions = ImageProcessingOptions.builder()
             .setOrientation(getOrientationFromRotation(rotation))

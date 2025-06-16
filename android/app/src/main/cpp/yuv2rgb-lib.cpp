@@ -43,14 +43,14 @@ namespace {
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_example_camera_1tflit_presentation_YuvNv21Adapter_yuv2Nv21(JNIEnv *env,
-                                                                    jobject thiz, jint width,
-                                                                    jint height, jbyteArray y,
-                                                                    jbyteArray u, jbyteArray v,
-                                                                    jint y_row_stride, jint uv_row_stride,
-                                                                    jint y_pixel_stride,
-                                                                    jint uv_pixel_stride,
-                                                                    jbyteArray nv21_output) {
+Java_com_example_camera_1tflit_presentation_Yuv2Nv21Adapter_yuv2Nv21(JNIEnv *env,
+                                                                     jobject thiz, jint width,
+                                                                     jint height, jbyteArray y,
+                                                                     jbyteArray u, jbyteArray v,
+                                                                     jint y_row_stride, jint uv_row_stride,
+                                                                     jint y_pixel_stride,
+                                                                     jint uv_pixel_stride,
+                                                                     jbyteArray nv21_output) {
     auto y_buffer = env->GetByteArrayElements(y, nullptr);
     auto u_buffer = env->GetByteArrayElements(u, nullptr);
     auto v_buffer = env->GetByteArrayElements(v, nullptr);

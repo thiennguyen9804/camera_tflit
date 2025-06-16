@@ -4,8 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 
 extension CameraImageX on CameraImage {
-  
-
   Map<String, dynamic> toMap() {
     final map = {
       'width': width,
